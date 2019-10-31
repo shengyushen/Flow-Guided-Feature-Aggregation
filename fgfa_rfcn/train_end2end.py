@@ -56,16 +56,71 @@ def train_net(args, ctx, pretrained, pretrained_flow, epoch, prefix, begin_epoch
     # load symbol
     shutil.copy2(os.path.join(curr_path, 'symbols', config.symbol + '.py'), final_output_path)
     sym_instance = eval(config.symbol + '.' + config.symbol)()
-    sym = sym_instance.get_train_symbol(config)
+
+    # symbol for varias steps
+    if config.CONV_DEPTH == 3 :
+      print('depth 3')
+      sym = sym_instance.get_train_symbol(config)
+
+      sym.save('fgfa.json')
+      #a = mx.viz.plot_network(sym, node_attrs={"shape":'rect',"fixedsize":'false'})
+      #a.render("fgfa")
+
+      # these are varias size for 3 step
+      # 36 is 4*NUM_ANCHORS
+      if config.RES_SCALE == 1 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 300, 300),"data_bef":(1,3,300,300),"data_aft":(1,3,300,300),"im_info":(1,3),"bbox_target":(1,36,19,19),"bbox_weight":(1,36,19,19),"gt_boxes":(1,1,5),"label":(1,3249)})
+      elif config.RES_SCALE == 2 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 600, 600),"data_bef":(1,3,600,600),"data_aft":(1,3,600,600),"im_info":(1,3),"bbox_target":(1,36,38,38),"bbox_weight":(1,36,38,38),"gt_boxes":(1,1,5),"label":(1,12996)})
+      elif config.RES_SCALE == 3 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 900, 900),"data_bef":(1,3,900,900),"data_aft":(1,3,900,900),"im_info":(1,3),"bbox_target":(1,36,57,57),"bbox_weight":(1,36,57,57),"gt_boxes":(1,1,5),"label":(1,29241)})
+      elif config.RES_SCALE == 5 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 1500, 1500),"data_bef":(1,3,1500,1500),"data_aft":(1,3,1500,1500),"im_info":(1,3),"bbox_target":(1,36,94,94),"bbox_weight":(1,36,94,94),"gt_boxes":(1,1,5),"label":(1,79524)})
+    elif config.CONV_DEPTH == 5:
+      print('depth 5')
+      sym = sym_instance.get_train_symbol_5(config)
+
+      # these are varias size for 5 step
+      if config.RES_SCALE == 1 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 300, 300),"data_bef2":(1,3,300,300),"data_bef1":(1,3,300,300),"data_aft1":(1,3,300,300),"data_aft2":(1,3,300,300),"im_info":(1,3),"bbox_target":(1,36,19,19),"bbox_weight":(1,36,19,19),"gt_boxes":(1,1,5),"label":(1,3249)})
+      elif config.RES_SCALE == 2 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 600, 600),"data_bef2":(1,3,600,600),"data_bef1":(1,3,600,600),"data_aft1":(1,3,600,600),"data_aft2":(1,3,600,600),"im_info":(1,3),"bbox_target":(1,36,38,38),"bbox_weight":(1,36,38,38),"gt_boxes":(1,1,5),"label":(1,12996)})
+      elif config.RES_SCALE == 3 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 900, 900),"data_bef2":(1,3,900,900),"data_bef1":(1,3,900,900),"data_aft1":(1,3,900,900),"data_aft2":(1,3,900,900),"im_info":(1,3),"bbox_target":(1,36,57,57),"bbox_weight":(1,36,57,57),"gt_boxes":(1,1,5),"label":(1,29241)})
+      elif config.RES_SCALE == 5 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 1500, 1500),"data_bef2":(1,3,1500,1500),"data_bef1":(1,3,1500,1500),"data_aft1":(1,3,1500,1500),"data_aft2":(1,3,1500,1500),"im_info":(1,3),"bbox_target":(1,36,94,94),"bbox_weight":(1,36,94,94),"gt_boxes":(1,1,5),"label":(1,79524)})
+    elif config.CONV_DEPTH == 11:
+      print('depth 11')
+      sym = sym_instance.get_train_symbol_11(config)
+
+      # these are varias size for 11 step
+      if config.RES_SCALE == 1 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 300, 300),"data_bef5":(1,3,300,300),"data_bef4":(1,3,300,300),"data_bef3":(1,3,300,300),"data_bef2":(1,3,300,300),"data_bef1":(1,3,300,300),"data_aft1":(1,3,300,300),"data_aft2":(1,3,300,300),"data_aft3":(1,3,300,300),"data_aft4":(1,3,300,300),"data_aft5":(1,3,300,300),"im_info":(1,3),"bbox_target":(1,36,19,19),"bbox_weight":(1,36,19,19),"gt_boxes":(1,1,5),"label":(1,3249)})
+      elif config.RES_SCALE == 2 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 600, 600),"data_bef5":(1,3,600,600),"data_bef4":(1,3,600,600),"data_bef3":(1,3,600,600),"data_bef2":(1,3,600,600),"data_bef1":(1,3,600,600),"data_aft1":(1,3,600,600),"data_aft2":(1,3,600,600),"data_aft3":(1,3,600,600),"data_aft4":(1,3,600,600),"data_aft5":(1,3,600,600),"im_info":(1,3),"bbox_target":(1,36,38,38),"bbox_weight":(1,36,38,38),"gt_boxes":(1,1,5),"label":(1,12996)})
+      elif config.RES_SCALE == 3 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 900, 900),"data_bef5":(1,3,900,900),"data_bef4":(1,3,900,900),"data_bef3":(1,3,900,900),"data_bef2":(1,3,900,900),"data_bef1":(1,3,900,900),"data_aft1":(1,3,900,900),"data_aft2":(1,3,900,900),"data_aft3":(1,3,900,900),"data_aft4":(1,3,900,900),"data_aft5":(1,3,900,900),"im_info":(1,3),"bbox_target":(1,36,57,57),"bbox_weight":(1,36,57,57),"gt_boxes":(1,1,5),"label":(1,29241)})
+      elif config.RES_SCALE == 5 :
+        mx.viz.print_summary(sym,shape={"data":(1, 3, 1500, 1500),"data_bef5":(1,3,1500,1500),"data_bef4":(1,3,1500,1500),"data_bef3":(1,3,1500,1500),"data_bef2":(1,3,1500,1500),"data_bef1":(1,3,1500,1500),"data_aft1":(1,3,1500,1500),"data_aft2":(1,3,1500,1500),"data_aft3":(1,3,1500,1500),"data_aft4":(1,3,1500,1500),"data_aft5":(1,3,1500,1500),"im_info":(1,3),"bbox_target":(1,36,94,94),"bbox_weight":(1,36,94,94),"gt_boxes":(1,1,5),"label":(1,79524)})
+    else:
+      print('depth invalid')
+      sys.exit(0)
+    
+    #sym.save('fgfa.json')
+    #a = mx.viz.plot_network(sym, node_attrs={"shape":'rect',"fixedsize":'false'})
+    #a.render("fgfa")
+
     feat_sym = sym.get_internals()['rpn_cls_score_output']
 
     # setup multi-gpu
     batch_size = len(ctx)
     input_batch_size = config.TRAIN.BATCH_IMAGES * batch_size
+    logging.info('config.TRAIN.BATCH_IMAGES : {}\n'.format(config.TRAIN.BATCH_IMAGES))
+    logging.info('batch_size : {}\n'.format(batch_size))
 
     # print config
-    pprint.pprint(config)
-    logger.info('training config:{}\n'.format(pprint.pformat(config)))
+    #pprint.pprint(config)
+    #logger.info('training config:{}\n'.format(pprint.pformat(config)))
 
     # load dataset and prepare imdb for training
     image_sets = [iset for iset in config.dataset.image_set.split('+')]
@@ -82,16 +137,43 @@ def train_net(args, ctx, pretrained, pretrained_flow, epoch, prefix, begin_epoch
                               bbox_std=config.network.ANCHOR_STDS)
 
     # infer max shape
-    max_data_shape = [('data', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
-                      ('data_bef', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
-                      ('data_aft', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]
+    if config.CONV_DEPTH == 3 :
+      # this is for 3 step
+      max_data_shape = [('data', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                        ('data_bef', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                        ('data_aft', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]
+    elif config.CONV_DEPTH == 5:
+      # this is for 5 steps
+      max_data_shape = [('data', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                        ('data_bef1', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                        ('data_aft1', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                        ('data_bef2', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_aft2', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]
+    elif config.CONV_DEPTH == 11:
+      # this is for 11 steps
+      max_data_shape = [('data', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_bef1', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_aft1', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_bef2', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_aft2', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_bef3', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_aft3', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_bef4', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_aft4', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_bef5', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES]))),
+                      ('data_aft5', (config.TRAIN.BATCH_IMAGES, 3, max([v[0] for v in config.SCALES]), max([v[1] for v in config.SCALES])))]
+    else:
+      print('depth invalid')
+      sys.exit(0)
+
     max_data_shape, max_label_shape = train_data.infer_shape(max_data_shape)
+    
     max_data_shape.append(('gt_boxes', (config.TRAIN.BATCH_IMAGES, 100, 5)))
     print 'providing maximum shape', max_data_shape, max_label_shape
 
     data_shape_dict = dict(train_data.provide_data_single + train_data.provide_label_single)
     pprint.pprint(data_shape_dict)
-    sym_instance.infer_shape(data_shape_dict)
+    print 'sdsdsdsd {}\n'.format(sym_instance.infer_shape(data_shape_dict))
 
     # load and initialize params
     if config.TRAIN.RESUME:
@@ -156,14 +238,13 @@ def train_net(args, ctx, pretrained, pretrained_flow, epoch, prefix, begin_epoch
 
     if not isinstance(train_data, PrefetchingIter):
         train_data = PrefetchingIter(train_data)
-
+    
     # train
     mod.fit(train_data, eval_metric=eval_metrics, epoch_end_callback=epoch_end_callback,
             batch_end_callback=batch_end_callback, kvstore=config.default.kvstore,
             optimizer='sgd', optimizer_params=optimizer_params,
             arg_params=arg_params, aux_params=aux_params, begin_epoch=begin_epoch, num_epoch=end_epoch)
-
-
+    
 def main():
     print('Called with argument:', args)
     ctx = [mx.gpu(int(i)) for i in config.gpus.split(',')]

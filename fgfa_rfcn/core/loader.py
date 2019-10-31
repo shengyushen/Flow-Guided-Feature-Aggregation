@@ -183,7 +183,15 @@ class AnchorLoader(mx.io.DataIter):
 
         # decide data and label names
         if config.TRAIN.END2END:
+          if config.CONV_DEPTH == 3 :
             self.data_name = ['data', 'data_bef', 'data_aft', 'im_info', 'gt_boxes']
+          elif config.CONV_DEPTH == 5:
+            self.data_name = ['data', 'data_bef1', 'data_aft1','data_bef2','data_aft2', 'im_info', 'gt_boxes']
+          elif config.CONV_DEPTH == 11:
+            self.data_name = ['data', 'data_bef1', 'data_aft1', 'data_bef2', 'data_aft2','data_bef3', 'data_aft3','data_bef4', 'data_aft4', 'data_bef5','data_aft5','im_info', 'gt_boxes']
+          else:
+            print('depth invalid')
+            sys.exit(0)
         else:
             self.data_name = ['data']
         self.label_name = ['label', 'bbox_target', 'bbox_weight']

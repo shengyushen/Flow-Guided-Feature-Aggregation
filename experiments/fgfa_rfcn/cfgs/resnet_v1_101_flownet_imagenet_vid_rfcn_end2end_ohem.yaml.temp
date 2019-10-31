@@ -6,11 +6,11 @@ symbol: resnet_v1_101_flownet_rfcn
 gpus: '0'
 CLASS_AGNOSTIC: true
 #ssy control depth
-CONV_DEPTH: 11
+CONV_DEPTH: CONV_DEPTH_TEMP
 # ssy control early stop
 EARLY_STOP: 20
 # ssy scaling factor
-RES_SCALE : 5
+RES_SCALE : RES_SCALE_TEMP
 #this is the old setting
 #SCALES:
 #- 600

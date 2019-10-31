@@ -17,7 +17,10 @@ config.output_path = ''
 config.symbol = ''
 config.gpus = ''
 config.CLASS_AGNOSTIC = True
-config.SCALES = [(600, 1000)]  # first is scale (the shorter side); second is max size
+config.CONV_DEPTH = 3
+config.RES_SCALE = 1
+config.EARLY_STOP = 20
+config.SCALES = [(300, 300)]  # first is scale (the shorter side); second is max size
 
 # default training
 config.default = edict()
