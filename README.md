@@ -1,3 +1,8 @@
+# NOTIC
+
+this manual is incorrect, refer to ssy.sh for how to run.
+
+
 # Flow-Guided Feature Aggregation for Video Object Detection
 
 
