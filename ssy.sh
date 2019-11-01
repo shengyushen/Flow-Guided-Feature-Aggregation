@@ -1,10 +1,10 @@
 # first time run
 # this is for cuda 8
-nvidia-docker run -v /home/nfs1/ssy:/home/ssy -w /home/ssy --name ssyFGFA1 -it  ubuntu:16.04 
+nvidia-docker run -v /home/nfs1/ssy:/home/ssy -w /home/ssy --name ssyCUDA8CUDNN6 -it  ubuntu:16.04 
 
 # second time run
-#nvidia-docker start ssyFGFA1
-#nvidia-docker exec -it ssyFGFA1 /bin/bash
+#nvidia-docker start ssyCUDA8CUDNN6
+#nvidia-docker exec -it ssyCUDA8CUDNN6 /bin/bash
 
 ######################3all in docker ########################
 apt update 
@@ -42,13 +42,13 @@ git submodule update
 grep url  .gitmodules |awk '{print "git clone " $NF}' > chkout.sh
 source chkout.sh
 # copy FGFA operators
-cp ../../Flow-Guided-Feature-Aggregation/fgfa_rfcn/operator_cxx/* ./src/operator/contrib/
+cp ../Flow-Guided-Feature-Aggregation/fgfa_rfcn/operator_cxx/* ./src/operator/contrib/
 # copy back my change
-cp mxnetpatch/visualization.py ../incubator-mxnet/python/mxnet/visualization.py
-cp mxnetpatch/iter_image_recordio_2.cc ../incubator-mxnet/src/io/iter_image_recordio_2.cc
-cp mxnetpatch/convolution_v1-inl.h ../incubator-mxnet/src/operator/convolution_v1-inl.h
-cp mxnetpatch/deconvolution-inl.h ../incubator-mxnet/src/operator/deconvolution-inl.h
-cp mxnetpatch/elemwise_binary_scalar_op_basic.cc ../incubator-mxnet/src/operator/tensor/elemwise_binary_scalar_op_basic.cc
+cp ../Flow-Guided-Feature-Aggregation/mxnetpatch/visualization.py                   python/mxnet/visualization.py
+cp ../Flow-Guided-Feature-Aggregation/mxnetpatch/iter_image_recordio_2.cc           src/io/iter_image_recordio_2.cc
+cp ../Flow-Guided-Feature-Aggregation/mxnetpatch/convolution_v1-inl.h               src/operator/convolution_v1-inl.h
+cp ../Flow-Guided-Feature-Aggregation/mxnetpatch/deconvolution-inl.h                src/operator/deconvolution-inl.h
+cp ../Flow-Guided-Feature-Aggregation/mxnetpatch/elemwise_binary_scalar_op_basic.cc src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 
 # compile
 # you may need to fix some error in compiling this version
@@ -65,7 +65,7 @@ python setup.py install
 # if you see libcudart.so.9.xxx can not found 
 # it because the lib dir is built with cuda9,
 # just remove all .so files in lib and run sh init.sh again
-cd Flow-Guided-Feature-Aggregation/
+cd ../Flow-Guided-Feature-Aggregation/
 ./plot.sh
 
 
