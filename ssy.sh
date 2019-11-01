@@ -34,16 +34,28 @@ git clone --recursive https://github.com/shengyushen/incubator-mxnet
 cd incubator-mxnet
 # have confirmed that v0.10.0 can not work because of mismatching length of returning infer_shape result
 #git checkout v0.10.0
-git checkout 1.0.0
+# this version is between 1.0.0 and 1.0.1
+git checkout 3df9bf802021d5aa67c609c6736acee94aaf3a48
 # this does not seems to work
 git submodule update
 # so I manually check out all modules in .gitmodules
 grep url  .gitmodules |awk '{print "git clone " $NF}' > chkout.sh
 source chkout.sh
+# copy FGFA operators
+cp ../../Flow-Guided-Feature-Aggregation/fgfa_rfcn/operator_cxx/* ./src/operator/contrib/
+# copy back my change
+cp mxnetpatch/visualization.py ../incubator-mxnet/python/mxnet/visualization.py
+cp mxnetpatch/iter_image_recordio_2.cc ../incubator-mxnet/src/io/iter_image_recordio_2.cc
+cp mxnetpatch/convolution_v1-inl.h ../incubator-mxnet/src/operator/convolution_v1-inl.h
+cp mxnetpatch/deconvolution-inl.h ../incubator-mxnet/src/operator/deconvolution-inl.h
+cp mxnetpatch/elemwise_binary_scalar_op_basic.cc ../incubator-mxnet/src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 
 # compile
 # you may need to fix some error in compiling this version
-# or else just check out my clean version https://github.com/shengyushen/mxnet100forFGFA
+# or eles you need to first check out https://github.com/shengyushen/incubator-mxnet
+#      git clone https://github.com/shengyushen/incubator-mxnet
+# and then apply my patch file to it
+# 
 make -j4 USE_OPENCV=1 USE_BLAS=openblas USE_CUDA=1 USE_CUDA_PATH=/usr/local/cuda USE_CUDNN=1 ADD_CFLAGS=-I/usr/include/openblas ADD_LDFLAGS=-L/usr/lib64
 # install mxnet
 cd python
