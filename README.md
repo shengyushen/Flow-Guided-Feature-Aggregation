@@ -1,4 +1,4 @@
-# NOTIC
+# NOTICE from SSY
 
 this manual is incorrect, refer to ssy.sh for how to run.
 
